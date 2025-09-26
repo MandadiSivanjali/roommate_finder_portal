@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Roommate Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 20px;
+            min-height: 80vh;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .message {
+            background-color: #e1f5fe;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .error {
+            background-color: #ffcdd2;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <a href="{% url 'home' %}"><strong>Roommate Portal</strong></a>
+    </div>
+    <nav>
+    {% if user.is_authenticated %}
+        <span>Hello, {{ user.username }}!</span>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'matches' %}">Matches</a>
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:white; cursor:pointer; margin-left: 15px;">
+                Logout
+            </button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'signup' %}">Signup</a>
+    {% endif %}
+</nav>
+
+</header>
+
+<main class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    &copy; 2025 Roommate Portal. All rights reserved.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matches - Roommate Finder</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+  body{background:#f9f7f6;color:#333;min-height:100vh;}
+  header{background:#ffafbd;color:#333;padding:18px 0;border-radius:0 0 20px 20px;box-shadow:0 4px 12px rgba(0,0,0,0.1);position:sticky;top:0;z-index:100;}
+  header .header-container{width:90%;margin:auto;display:flex;justify-content:space-between;align-items:center;}
+  header h1{font-size:1.6em;font-weight:700;}
+  nav a{text-decoration:none;padding:8px 16px;border-radius:8px;font-weight:500;background:rgba(255,255,255,0.5);color:#333;margin-left:10px;transition:0.3s;position:relative;}
+  nav a:hover{background:rgba(255,255,255,0.7);}
+  .notification-badge{position:absolute;top:2px;right:6px;background:#ff6b6b;color:white;font-size:0.7em;font-weight:600;padding:2px 5px;border-radius:50%;}
+  h2{text-align:center;margin:30px 0;color:#ff6f61;}
+  .container{width:90%;max-width:800px;margin:auto;}
+  .match-card{background:#fff;border-radius:15px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:transform 0.3s ease, box-shadow 0.3s ease;}
+  .match-card:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,0.12);}
+  .match-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .match-header h3{font-size:1.2em;font-weight:600;}
+  .budget{font-size:0.9em;font-weight:600;color:#2e7d32;}
+  .match-body{margin-top:10px;}
+  .match-body p{margin-bottom:6px;font-size:0.95em;}
+  .hobbies{margin:10px 0;display:flex;flex-wrap:wrap;gap:6px;}
+  .hobby{background:#ffe0e0;padding:4px 10px;border-radius:12px;font-size:0.8em;color:#d84315;}
+  .btn-chat{display:inline-block;margin-top:10px;padding:6px 14px;border-radius:8px;font-weight:500;cursor:pointer;font-size:0.9em;text-decoration:none;background:#ff9a9e;color:white;margin-right:6px;}
+  .btn-chat:hover{opacity:0.9;}
+  .profile-pic{width:40px;height:40px;border-radius:50%;object-fit:cover;}
+  .no-matches{text-align:center;color:#777;margin-top:50px;font-size:1.1em;}
+  .toggle-buttons{text-align:center;margin-bottom:20px;}
+  .toggle-buttons button{margin:0 8px;padding:6px 14px;border:none;border-radius:8px;font-weight:500;cursor:pointer;background:#ff9a9e;color:white;transition:0.3s;}
+  .toggle-buttons button:hover{opacity:0.85;}
+  .toggle-buttons button.active{background:#ff6f61;}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-container">
+    <h1>Roommate Finder</h1>
+    <nav>
+      <a href="{% url 'edit_profile' %}">Profile</a>
+      <a href="{% url 'chat_list' %}">Chats <span class="notification-badge">{{ unread_count|default:0 }}</span></a>
+      <a href="{% url 'home' %}">Logout</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+<h2>Roommate Matches</h2>
+
+<div class="toggle-buttons">
+  <button id="btnSuggested" class="active" onclick="showSuggested()">Suggested Matches</button>
+  <button id="btnAll" onclick="showAll()">All Matches</button>
+</div>
+
+<!-- Suggested Matches -->
+<div id="suggested">
+{% for match in suggested_matches %}
+  <div class="match-card">
+    <div class="match-header">
+      {% if match.profile_pic %}<img src="{{ match.profile_pic.url }}" class="profile-pic">{% endif %}
+      <h3>{{ match.user.first_name }} {{ match.user.last_name|default:match.user.username }}</h3>
+    </div>
+    <div class="match-body">
+      <p class="budget">₹{{ match.budget|default:"N/A" }}/month</p>
+      {% if match.location %}<p>Location: {{ match.location }}</p>{% endif %}
+      {% if match.nationality %}<p>Nationality: {{ match.nationality }}</p>{% endif %}
+      {% if match.employment %}<p>Employment: {{ match.employment }}</p>{% endif %}
+      {% if match.daynight %}<p>Day/Night: {{ match.daynight }}</p>{% endif %}
+      <div class="hobbies">
+        {% for hobby in match.hobbies_list %}<span class="hobby">{{ hobby }}</span>{% endfor %}
+      </div>
+    </div>
+    <a href="{% url 'chat' match.user.id %}" class="btn-chat">💬 Chat</a>
+  </div>
+{% empty %}
+  <p class="no-matches">No suggested matches available 😔</p>
+{% endfor %}
+</div>
+
+<!-- All Matches -->
+<div id="all" style="display:none;">
+{% for match in all_matches %}
+  <div class="match-card">
+    <div class="match-header">
+      {% if match.profile_pic %}<img src="{{ match.profile_pic.url }}" class="profile-pic">{% endif %}
+      <h3>{{ match.user.first_name }} {{ match.user.last_name|default:match.user.username }}</h3>
+    </div>
+    <div class="match-body">
+      <p class="budget">₹{{ match.budget|default:"N/A" }}/month</p>
+      {% if match.location %}<p>Location: {{ match.location }}</p>{% endif %}
+      {% if match.nationality %}<p>Nationality: {{ match.nationality }}</p>{% endif %}
+      {% if match.employment %}<p>Employment: {{ match.employment }}</p>{% endif %}
+      {% if match.daynight %}<p>Day/Night: {{ match.daynight }}</p>{% endif %}
+      <div class="hobbies">
+        {% for hobby in match.hobbies_list %}<span class="hobby">{{ hobby }}</span>{% endfor %}
+      </div>
+    </div>
+    <a href="{% url 'chat' match.user.id %}" class="btn-chat">💬 Chat</a>
+  </div>
+{% empty %}
+  <p class="no-matches">No matches available 😔</p>
+{% endfor %}
+</div>
+
+</div>
+
+<script>
+function showSuggested(){
+  document.getElementById('suggested').style.display='block';
+  document.getElementById('all').style.display='none';
+  document.getElementById('btnSuggested').classList.add('active');
+  document.getElementById('btnAll').classList.remove('active');
+}
+function showAll(){
+  document.getElementById('suggested').style.display='none';
+  document.getElementById('all').style.display='block';
+  document.getElementById('btnSuggested').classList.remove('active');
+  document.getElementById('btnAll').classList.add('active');
+}
+</script>
+</body>
+</html>

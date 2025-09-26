@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat with {{ roommate.username }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f2f2f2; display: flex; justify-content: center; padding: 30px; }
+    .container { width: 500px; background: #fff; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); padding: 20px; display: flex; flex-direction: column; }
+    .back-link { text-decoration: none; color: #ff6f61; font-weight: 600; margin-bottom: 15px; }
+    .chat-box { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; padding-right: 10px; }
+    .message { display: flex; }
+    .message.user { justify-content: flex-end; }
+    .bubble { max-width: 70%; padding: 10px 14px; border-radius: 20px; word-wrap: break-word; line-height: 1.4; }
+    .bubble.user { background: #ff6f61; color: #fff; border-bottom-right-radius: 0; }
+    .bubble.roommate { background: #e0e0e0; color: #000; border-bottom-left-radius: 0; }
+    .timestamp { font-size: 0.7em; margin-top: 5px; text-align: right; color: #666; }
+    form { display: flex; gap: 10px; }
+    input[type="text"] { flex: 1; padding: 10px 14px; border-radius: 20px; border: 1px solid #ccc; outline: none; }
+    button { padding: 10px 16px; border: none; border-radius: 50%; background: #ff6f61; color: #fff; cursor: pointer; font-size: 1.2em; }
+    button:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{% url 'chat_list' %}" class="back-link">⬅ Back to Chat List</a>
+    <h2>Chat with {{ roommate.username }}</h2>
+
+    <div class="chat-box" id="chatBox">
+      {% for msg in messages %}
+        <div class="message {% if msg.sender == user %}user{% else %}roommate{% endif %}">
+          <div class="bubble {% if msg.sender == user %}user{% else %}roommate{% endif %}">
+            {{ msg.content|linebreaks }}
+            <div class="timestamp">{{ msg.timestamp|date:"d M H:i" }}</div>
+          </div>
+        </div>
+      {% empty %}
+        <p>No messages yet. Start the chat! 😊</p>
+      {% endfor %}
+    </div>
+
+    <form method="POST" action="{% url 'chat' roommate.id %}">
+      {% csrf_token %}
+      <input type="text" name="content" placeholder="Type a message... 😃" required>
+      <button type="submit">➡️</button>
+    </form>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById('chatBox');
+    chatBox.scrollTop = chatBox.scrollHeight;
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f0f2f5; padding: 20px; }
+    .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h1 { text-align: center; margin-bottom: 20px; }
+    .step { display: none; }
+    .step.active { display: block; }
+    .form-group { margin-bottom: 15px; }
+    label { font-weight: 600; display: block; margin-bottom: 5px; }
+    input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; }
+    button { padding: 10px 20px; background: #31725d; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #255a46; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Profile 📝</h1>
+    <form method="POST" enctype="multipart/form-data" id="profileForm">
+      {% csrf_token %}
+
+      <!-- Step 1: Basic Info -->
+      <div class="step active" id="step1">
+        <div class="form-group">
+          {{ form.gender.label_tag }}
+          {{ form.gender }}
+        </div>
+        <div class="form-group">
+          {{ form.profile_pic.label_tag }}
+          {{ form.profile_pic }}
+          {% if form.instance.profile_pic %}
+            <img src="{{ form.instance.profile_pic.url }}" alt="Profile Pic" style="width:100px;height:100px;margin-top:5px;border-radius:50%;">
+          {% endif %}
+        </div>
+        <button type="button" onclick="nextStep(2)">Next ➡</button>
+      </div>
+
+      <!-- Step 2: Location & Nationality -->
+      <div class="step" id="step2">
+        <div class="form-group">
+          {{ form.college.label_tag }}
+          {{ form.college }}
+        </div>
+        <div class="form-group">
+          {{ form.location.label_tag }}
+          {{ form.location }}
+        </div>
+        <div class="form-group">
+          {{ form.nationality.label_tag }}
+          {{ form.nationality }}
+        </div>
+        <div class="form-group">
+          {{ form.country.label_tag }}
+          {{ form.country }}
+        </div>
+        <button type="button" onclick="prevStep(1)">⬅ Back</button>
+        <button type="button" onclick="nextStep(3)">Next ➡</button>
+      </div>
+
+      <!-- Step 3: Hobbies & Employment -->
+      <div class="step" id="step3">
+        <div class="form-group">
+          {{ form.hobbies.label_tag }}
+          {{ form.hobbies }}
+        </div>
+        <div class="form-group">
+          {{ form.employment.label_tag }}
+          {{ form.employment }}
+        </div>
+        <div class="form-group">
+          {{ form.daynight.label_tag }}
+          {{ form.daynight }}
+        </div>
+        <button type="button" onclick="prevStep(2)">⬅ Back</button>
+        <button type="button" onclick="nextStep(4)">Next ➡</button>
+      </div>
+
+      <!-- Step 4: Roommate Preferences -->
+      <div class="step" id="step4">
+        <div class="form-group">
+          {{ form.pref_gender.label_tag }}
+          {{ form.pref_gender }}
+        </div>
+        <div class="form-group">
+          {{ form.room_rules.label_tag }}
+          {{ form.room_rules }}
+        </div>
+        <div class="form-group">
+          {{ form.budget.label_tag }}
+          {{ form.budget }}
+        </div>
+        <div class="form-group">
+          {{ form.pref_schedule.label_tag }}
+          {{ form.pref_schedule }}
+        </div>
+        <button type="button" onclick="prevStep(3)">⬅ Back</button>
+        <button type="submit">Save Profile ✅</button>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    function showStep(step) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step'+step).classList.add('active');
+      currentStep = step;
+    }
+    function nextStep(step){ showStep(step); }
+    function prevStep(step){ showStep(step); }
+  </script>
+</body>
+</html>

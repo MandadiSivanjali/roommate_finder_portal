@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat List</title>
+  <style>
+    body { font-family: Arial; background: #f2f2f2; display: flex; justify-content: center; padding: 30px; }
+    .container { width: 500px; background: #fff; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); padding: 20px; }
+    .user-card { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+    .badge { background: red; color: #fff; padding: 2px 8px; border-radius: 50%; font-size: 0.8em; }
+    a { text-decoration: none; color: #ff6f61; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Chats</h2>
+    {% for u in users %}
+      <div class="user-card">
+        <span>{{ u.username }}</span>
+        <a href="{% url 'chat' u.id %}">💬 Chat {% if u.unread_count %}<span class="badge">{{ u.unread_count }}</span>{% endif %}</a>
+      </div>
+    {% empty %}
+      <p>No users to chat with yet.</p>
+    {% endfor %}
+  </div>
+</body>
+</html>

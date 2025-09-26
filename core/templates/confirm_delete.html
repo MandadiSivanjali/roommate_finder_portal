@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fceaea;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 80px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        h2 {
+            color: #d9534f;
+        }
+        p {
+            margin: 20px 0;
+            font-size: 16px;
+            color: #444;
+        }
+        .btn-danger {
+            background: #d9534f;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-danger:hover {
+            background: #c9302c;
+        }
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Delete Profile</h2>
+    <p>Are you sure you want to delete your profile? This action cannot be undone.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-danger">Yes, Delete</button>
+        <a href="{% url 'profile' %}">
+            <button type="button" class="btn-cancel">Cancel</button>
+        </a>
+    </form>
+</div>
+</body>
+</html>

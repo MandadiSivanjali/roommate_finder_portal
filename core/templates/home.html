@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roommate Finder Portal</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+
+    body {
+      background-color: #f9fafc;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container { width:90%; max-width:1200px; margin:auto; display: flex; align-items: center; justify-content: space-between; }
+
+    /* Header */
+    header {
+      background: rgba(0, 38, 77, 0.9); /* deep blue that matches hero background */
+      color:white;
+      padding:15px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 {
+      font-size:1.7em;
+      letter-spacing: 1px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    header nav a {
+      text-decoration:none;
+      margin-left:15px;
+      padding:8px 18px;
+      border-radius:25px;
+      font-weight: 500;
+      transition:0.3s;
+    }
+    header nav a.login {
+      background-color: #4caf50;
+      color:white;
+    }
+    header nav a.login:hover {
+      background-color:#e68900;
+    }
+    header nav a.signup {
+      background-color: #4caf50;
+      color:white;
+    }
+    header nav a.signup:hover {
+      background-color:#3e8e41;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align:center;
+      padding:150px 20px;
+      background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+      background-size: cover;   /* covers full area */
+      color:white;
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero::before {
+      content:"";
+      position:absolute;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.55); /* overlay for readability */
+    }
+    .hero .container {
+      position: relative;
+      z-index: 1;
+      flex-direction: column;
+    }
+    .hero h2 {
+      font-size:3em;
+      margin-bottom:20px;
+      font-weight:700;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+    .hero p { 
+      font-size:1.4em;
+      margin-bottom:35px;
+      opacity: 0.95;
+      text-shadow: 1px 1px 6px rgba(0,0,0,0.6);
+    }
+    .hero-btn {
+      background: linear-gradient(90deg, #ff9800, #ff5722);
+      color:white;
+      padding:15px 35px;
+      text-decoration:none;
+      border-radius:35px;
+      font-size:1.2em;
+      font-weight: 600;
+      transition:0.3s;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+    .hero-btn:hover {
+      background: linear-gradient(90deg, #e68900, #e64a19);
+      transform: translateY(-4px);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Roommate Finder</h1>
+      <nav>
+        <a href="{% url 'login' %}" class="login">Login</a>
+        <a href="{% url 'signup' %}" class="signup">Signup</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h2>Find your perfect roommate</h2>
+      <p>Safe • Easy • Reliable</p>
+      <a href="{% url 'signup' %}" class="hero-btn">Get Started</a>
+    </div>
+  </section>
+</body>
+</html>
